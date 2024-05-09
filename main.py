@@ -9,11 +9,11 @@ import zipfile
 app = Flask(__name__)
 
 # 设置上传文件的保存路径
-UPLOAD_FOLDER = './upload/'
+UPLOAD_FOLDER = '/root/Format_Convertor/upload/'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 # 设置生成文件的保存路径
-PROCESSED_FOLDER = './processed/'
+PROCESSED_FOLDER = '/root/Format_Convertor/processed/'
 app.config['PROCESSED_FOLDER'] = PROCESSED_FOLDER
 
 @app.route('/')
@@ -47,7 +47,7 @@ def upload_file():
 
     # 处理上传的文件并生成Excel
     format_convertor.format_convertor(filename_list, read_path=app.config['UPLOAD_FOLDER'], save_path=app.config['PROCESSED_FOLDER'])
-
+    
     # 提供打包下载链接
     zip_file_path = os.path.join(app.config['PROCESSED_FOLDER'], 'processed_files.zip')
     with zipfile.ZipFile(zip_file_path, 'w') as zipf:
@@ -61,4 +61,4 @@ def upload_file():
 
 
 if __name__ == '__main__':
-    app.run(debug=True, host='0.0.0.0', port=9090)
+    app.run(debug=False, host='0.0.0.0', port=9090)
