@@ -61,4 +61,5 @@ def upload_file():
 
 
 if __name__ == '__main__':
-    app.run(debug=False, host='0.0.0.0', port=9090)
+    # app.run(debug=False, host='0.0.0.0', port=80, ssl_context=('/root/Format_Convertor/cert/www.formatconv.cn.pem', '/root/Format_Convertor/cert/www.formatconv.cn.key'))
+    app.run(debug=False, host='0.0.0.0', port=80)
