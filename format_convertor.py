@@ -53,81 +53,45 @@ def format_convertor(input_filename, read_path, save_path):
         df_input = df_old[df_old["姓名"].str.len() > 0]
         df_input.reset_index(drop=True, inplace=True)
 
-        try:
-            for i in range(len(df_input)):
-                short_ID.append(df_input["P-sid"][i])
-                name.append(df_input["姓名"][i])
-                ID.append(type_convert(df_input["身份证号"][i]))
-                doctor.append(df_input["首诊医生"][i])
-                hospital.append(df_input["就诊医院"][i])
-                birth.append(df_input["出生日期"][i])
-                pat_ID.append(type_convert(df_input["就诊卡号"][i]))
-                hosp_ID.append(type_convert(df_input["病案号"][i]))
-                tel1.append(type_convert(df_input["联系电话"][i]))
-                tel2.append(type_convert(df_input["备用联系电话"][i]))
-                note.append(df_input["其他"][i])
-                null.append("")
-    
-                i_gender = df_input["性别"][i]
-                if i_gender == "女":
-                    gender.append("女")
-                elif i_gender == "男":
-                    gender.append("男")
-                else:
-                    gender.append("未知")
-    
-                trio_i = df_input["家系组"][i]
-                if trio_i == "无家系":
-                    trio.append("否")
-                else:
-                    trio.append("是")
-    
-                b = df_input["出生日期"][i]
-                a = pd.to_datetime(b)
-                i_age = dt.date.today().year - a.year
-                age.append(i_age)
-    
-        except Exception as e:
-            for i in range(len(df_input)):
-                name.append(df_input["姓名"][i])
-                ID.append(type_convert(df_input["身份证号"][i]))
-                doctor.append(df_input["首诊医生"][i])
-                hospital.append(df_input["就诊医院"][i])
-                birth.append(df_input["出生日期"][i])
-                pat_ID.append(type_convert(df_input["就诊卡号"][i]))
-                hosp_ID.append(type_convert(df_input["病案号"][i]))
-                short_ID.append(df_input["P-SID"][i])
-                tel1.append(type_convert(df_input["联系电话"][i]))
-                tel2.append(type_convert(df_input["备用联系电话"][i]))
-                note.append(df_input["其他"][i])
-                null.append("")
-    
-                i_gender = df_input["性别"][i]
-                if i_gender == "女":
-                    gender.append("女")
-                elif i_gender == "男":
-                    gender.append("男")
-                else:
-                    gender.append("未知")
-    
-                trio_i = df_input["家系组"][i]
-                if trio_i == "无家系":
-                    trio.append("否")
-                else:
-                    trio.append("是")
-    
-                b = df_input["出生日期"][i]
-                a = pd.to_datetime(b)
-                i_age = dt.date.today().year - a.year
-                age.append(i_age)
 
-    
+        for i in range(len(df_input)):
+            short_ID.append(df_input["P-SID"][i])
+            name.append(df_input["姓名"][i])
+            ID.append(type_convert(df_input["身份证号"][i]))
+            doctor.append(df_input["首诊医生"][i])
+            hospital.append(df_input["就诊医院"][i])
+            birth.append(str(df_input["身份证号"][i])[6:14])
+            pat_ID.append(type_convert(df_input["就诊卡号"][i]))
+            hosp_ID.append(type_convert(df_input["病案号"][i]))
+            tel1.append(type_convert(df_input["联系电话"][i]))
+            tel2.append(type_convert(df_input["备用联系电话"][i]))
+            note.append(df_input["其他"][i])
+            null.append("")
+
+            i_gender = df_input["性别"][i]
+            if i_gender == "女":
+                gender.append("女")
+            elif i_gender == "男":
+                gender.append("男")
+            else:
+                gender.append("未知")
+
+            trio_i = df_input["家系组"][i]
+            if trio_i == "无家系":
+                trio.append("否")
+            else:
+                trio.append("是")
+
+            b = str(df_input["身份证号"][i])[6:14]  # 出生日期
+            a = pd.to_datetime(b)
+            i_age = dt.date.today().year - a.year
+            age.append(i_age)
+
     # 修复index
     for e in range(len(name)):
         e += 1
         index.append(e)
-        
-    
+
     df_o1 = pd.DataFrame(
         {"病案号": hosp_ID, "就诊医生": doctor, "*受检人姓名": name, "0": null, "*性别": gender, "身份证号": ID, "*出生日期": birth,
          "年龄": age,

@@ -9,11 +9,11 @@ import zipfile
 app = Flask(__name__)
 
 # 设置上传文件的保存路径
-UPLOAD_FOLDER = '/root/Format_Convertor/upload/'
+UPLOAD_FOLDER = './upload/'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 # 设置生成文件的保存路径
-PROCESSED_FOLDER = '/root/Format_Convertor/processed/'
+PROCESSED_FOLDER = './processed/'
 app.config['PROCESSED_FOLDER'] = PROCESSED_FOLDER
 
 @app.route('/')
@@ -62,4 +62,4 @@ def upload_file():
 
 if __name__ == '__main__':
     # app.run(debug=False, host='0.0.0.0', port=80, ssl_context=('/root/Format_Convertor/cert/www.formatconv.cn.pem', '/root/Format_Convertor/cert/www.formatconv.cn.key'))
-    app.run(debug=False, host='0.0.0.0', port=80)
+    app.run(debug=True, host='0.0.0.0', port=80)
