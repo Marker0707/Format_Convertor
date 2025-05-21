@@ -16,7 +16,7 @@ def type_convert(args):
 def format_convertor(input_filename, read_path, save_path):
     '''
     Input: a list of filenames
-    
+
     '''
     ID = []
     pat_ID = []
@@ -34,12 +34,12 @@ def format_convertor(input_filename, read_path, save_path):
     tel1 = []
     tel2 = []
     null = []
-    
+
     x = len(input_filename)
     for file_name in input_filename:
         # read dataframe
         file_type = file_name.split('.')[-1:][0]
-    
+
         if file_type == "csv":
             df_old = pd.read_csv(read_path + '/' +file_name, dtype=str)
         elif file_type == "xlsx":
@@ -48,7 +48,7 @@ def format_convertor(input_filename, read_path, save_path):
             df_old = pd.read_table(read_path + '/' + file_name, dtype=str)
         else:
             print("文件类型有误，仅支持csv,xlsx,txt格式文件")
-    
+
         # 筛选
         df_input = df_old[df_old["姓名"].str.len() > 0]
         df_input.reset_index(drop=True, inplace=True)
@@ -143,3 +143,4 @@ def format_convertor(input_filename, read_path, save_path):
     for cell in ws[2]:
         cell.fill = PatternFill('solid', fgColor="87CEEB")
     wb.save(file)
+

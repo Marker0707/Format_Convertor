@@ -122,31 +122,7 @@
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>Format Convertor</h1>
-        <div class="steps">
-            <p>STEP 1: 选择需要转换的文件</p>
-            <p>STEP 2: 点击开始转换</p>
-        </div>
-        <p class="instruction2">请把Phenix数据库和操作系统语言改为中文！不支持英文系统！</p>
-        <div class="upload-form">
-            <form method="POST" enctype="multipart/form-data" action="/upload">
-                <input type="file" name="files[]" multiple><br><br>
-                <input class="upload-btn" type="submit" value="开始转换">
-            </form>
-        </div>
-        
-        <!-- 新增Contributor板块 -->
-        <div class="contributor-section">
-            <h2>Contributor</h2>
-            <!-- <img class="contributor-img" src="contributor_image.jpg" alt="Contributor Image"> -->
-            <p>Format Convertor来源于@唯唯🍪提供的python脚本（感谢！🙏），从一开始运行在命令行中的format transfer到拥有用户界面的format convertor APP，历经数次迭代后，Format Convertor现在可以在线使用！</p>
-            <p>感谢门诊@胖子杰和各位同学对软件调试的贡献！</p>
-            <p class="contact">📧 使用问题请联系 caijh09@gmail.com</p>
-            <p class="contact">京ICP备2024077866号</p>
-            <p class="wulab">© 2024 Wu lab</p>
-        </div>
-    </div>
+    <div id="root"></div>
 </body>
 </html>
 
