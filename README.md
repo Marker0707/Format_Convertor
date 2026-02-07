@@ -18,8 +18,13 @@ git clone <本项目地址>
 cd Format_Convertor
 docker-compose up --build
 ```
-- 前端访问：http://localhost:8080
+- 前端访问：http://localhost
 - 后端 API：http://localhost:8000
+
+如需改前端宿主机端口，可通过环境变量覆盖：
+```bash
+FRONTEND_PORT=8080 docker-compose up --build
+```
 
 ### 2. 单独构建与运行
 
@@ -34,8 +39,15 @@ docker run -p 8000:8000 format-backend
 ```bash
 cd frontend
 docker build -t format-frontend .
-docker run -p 8080:80 format-frontend
+docker run -p 80:80 format-frontend
 ```
+
+## 常见排查
+- 若 `http://localhost` 无法访问，先检查 `80` 端口是否被占用：
+```bash
+sudo lsof -iTCP:80 -sTCP:LISTEN -n -P
+```
+- 服务部署在远程服务器时，请使用 `http://服务器IP` 或域名访问，不是你本机的 `localhost`。
 
 ## API 简介
 - POST /api/upload  上传文件并自动转换，返回压缩包
