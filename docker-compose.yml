@@ -3,10 +3,13 @@ services:
   backend:
     build:
       context: ./backend
-    container_name: format-backend
+    container_name: backend
+    hostname: backend
     ports:
       - "8000:8000"
     restart: unless-stopped
+    networks:
+      - app-network
 
   frontend:
     build:
@@ -17,4 +20,9 @@ services:
     depends_on:
       - backend
     restart: unless-stopped
+    networks:
+      - app-network
 
+networks:
+  app-network:
+    driver: bridge
