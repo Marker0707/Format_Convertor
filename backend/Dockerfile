@@ -3,6 +3,7 @@ FROM python:3.10-slim
 
 WORKDIR /app
 
+COPY pip.conf /etc/pip.conf
 COPY . .
 WORKDIR /app
 
