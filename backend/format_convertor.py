@@ -3,6 +3,20 @@ from openpyxl import load_workbook
 from openpyxl.styles import *
 import datetime as dt
 
+
+def _normalize_text(value):
+    if pd.isna(value):
+        return ""
+    return str(value).strip()
+
+
+def _pick_existing_column(df, candidates):
+    for col in candidates:
+        if col in df.columns:
+            return col
+    return None
+
+
 def type_convert(args):
     if str(args) != "nan":
         try:
@@ -49,26 +63,42 @@ def format_convertor(input_filename, read_path, save_path):
         else:
             print("文件类型有误，仅支持csv,xlsx,txt格式文件")
 
+        # 统一处理表头，避免 BOM/空格导致匹配失败
+        df_old.columns = [str(col).replace("\ufeff", "").strip() for col in df_old.columns]
+
+        required_columns = [
+            "姓名", "P-SID", "身份证号", "首诊医生", "就诊医院",
+            "就诊卡号", "病案号", "联系电话", "备用联系电话", "其他", "性别"
+        ]
+        missing_columns = [col for col in required_columns if col not in df_old.columns]
+        if missing_columns:
+            raise KeyError(f"缺少必要列: {', '.join(missing_columns)}")
+
+        trio_col = _pick_existing_column(df_old, ["家系组", "家系角色", "组织"])
+        if trio_col is None:
+            raise KeyError("缺少家系信息列: 家系组/家系角色/组织")
+
         # 筛选
-        df_input = df_old[df_old["姓名"].str.len() > 0]
+        valid_name = df_old["姓名"].fillna("").astype(str).str.strip().str.len() > 0
+        df_input = df_old[valid_name]
         df_input.reset_index(drop=True, inplace=True)
 
 
         for i in range(len(df_input)):
             short_ID.append(df_input["P-SID"][i])
-            name.append(df_input["姓名"][i])
+            name.append(_normalize_text(df_input["姓名"][i]))
             ID.append(type_convert(df_input["身份证号"][i]))
-            doctor.append(df_input["首诊医生"][i])
-            hospital.append(df_input["就诊医院"][i])
+            doctor.append(_normalize_text(df_input["首诊医生"][i]))
+            hospital.append(_normalize_text(df_input["就诊医院"][i]))
             birth.append(str(df_input["身份证号"][i])[6:14])
             pat_ID.append(type_convert(df_input["就诊卡号"][i]))
             hosp_ID.append(type_convert(df_input["病案号"][i]))
             tel1.append(type_convert(df_input["联系电话"][i]))
             tel2.append(type_convert(df_input["备用联系电话"][i]))
-            note.append(df_input["其他"][i])
+            note.append(_normalize_text(df_input["其他"][i]))
             null.append("")
 
-            i_gender = df_input["性别"][i]
+            i_gender = _normalize_text(df_input["性别"][i])
             if i_gender == "女":
                 gender.append("女")
             elif i_gender == "男":
@@ -76,8 +106,8 @@ def format_convertor(input_filename, read_path, save_path):
             else:
                 gender.append("未知")
 
-            trio_i = df_input["家系组"][i]
-            if trio_i == "无家系":
+            trio_i = _normalize_text(df_input[trio_col][i])
+            if trio_i in ["", "无家系", "无", "否", "散发", "单例"]:
                 trio.append("否")
             else:
                 trio.append("是")
@@ -143,4 +173,3 @@ def format_convertor(input_filename, read_path, save_path):
     for cell in ws[2]:
         cell.fill = PatternFill('solid', fgColor="87CEEB")
     wb.save(file)
-
